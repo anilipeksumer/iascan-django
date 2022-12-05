@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<!-- <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+<script defer src="https://pyscript.net/latest/pyscript.js"></script> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="row">
+    <div style="color: white;" class="col-md-6 offset-md-3">
+        <h3>Dirbuster Scan Page</h3>
+        <hr>
+        <form method = "POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.media}}
+            {{form|crispy}}
+            <br>
+                <button id = "startButton" type = "submit" class = "spinner-button btn btn-primary mb-2">Start</button>
+                <!-- <button id = "startButton" type = "submit" class = "btn btn-danger">Start</button> -->
+
+                <hr>
+                <p>
+                  This process takes some time. Please be patient.
+                </p>
+                  </form>              
+        <!-- </form> -->
+    </div>
+  </div>
+  <script>
+    window.addEventListener( "pageshow", function ( event ) {
+      var historyTraversal = event.persisted || 
+                             ( typeof window.performance != "undefined" && 
+                                  window.performance.navigation.type === 2 );
+      if ( historyTraversal ) {
+        // Handle page restore.
+        window.location.reload();
+      }
+    });
+  </script>
+<script>
+  const btn = document.getElementById('startButton');
+
+// ✅ Change button text on click
+btn.addEventListener('click', function handleClick() {
+  btn.textContent = 'Loading';
+
+});
+</script>
+
+{% endblock body %}
+

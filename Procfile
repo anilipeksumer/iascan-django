@@ -1,0 +1,1 @@
+web: gunicorn iascanProject.wsgi --log-file -

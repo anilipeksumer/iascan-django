@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<!-- <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+<script defer src="https://pyscript.net/latest/pyscript.js"></script> -->
+
+<div class="row">
+    <div style="color: white;" class="col-md-6 offset-md-3">
+        <h3>Scan Page</h3>
+        <hr>
+        <form method = "POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.media}}
+            {{form|crispy}}
+            <br>
+                <button id = "startButton" type = "submit" class = "spinner-button btn btn-primary mb-2">Start</button>
+                
+                <hr>
+                <p>(T5 Fastest, T1 Slowest)</p>
+                  </form>
+                 
+                  <script>
+                    const btn = document.getElementById('startButton');
+                  
+                  // ✅ Change button text on click
+                  btn.addEventListener('click', function handleClick() {
+                    btn.textContent = 'Loading';
+                  });
+                  </script>
+        <!-- </form> -->
+    </div>
+  </div>
+  <script>
+    window.addEventListener( "pageshow", function ( event ) {
+      var historyTraversal = event.persisted || 
+                             ( typeof window.performance != "undefined" && 
+                                  window.performance.navigation.type === 2 );
+      if ( historyTraversal ) {
+        // Handle page restore.
+        window.location.reload();
+      }
+    });
+  </script>
+
+{% endblock body %}
+
