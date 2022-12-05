@@ -18,7 +18,13 @@ class PortScannerDjango:
         self.hname = ""
         self.ip = ""
     
-    def backenderTerminal(self,djangoIP,djangoRange,djangoVelocity):
+    def backenderTerminal(self,djangoIP,djangoStartPort,djangoEndPort,djangoVelocity):
+        startPort = int(djangoStartPort)
+        endPort = int(djangoEndPort)
+        if type(startPort) == "<class \'int\'>" or type(endPort) == "<class \'int\'>":
+            raise ValueError
+        if startPort > endPort or startPort < 0 or endPort < 0 or startPort > 65535 or endPort > 65535:
+            raise ValueError
         self.ip = ""
         self.open_ports.clear()
         self.capturedBanners.clear()
@@ -29,10 +35,10 @@ class PortScannerDjango:
         print("************************************************")
         port_range_pattern = re.compile("([0-9]+)-([0-9]+)")
 
-        port_range_valid = port_range_pattern.search(djangoRange.replace(" ",""))
-        if port_range_valid:
-            startPort = int(port_range_valid.group(1))
-            endPort = int(port_range_valid.group(2)) + 1
+        # port_range_valid = port_range_pattern.search(djangoRange.replace(" ",""))
+        # if port_range_valid:
+        #     startPort = int(port_range_valid.group(1))
+        #     endPort = int(port_range_valid.group(2)) + 1
                
         if djangoVelocity == 'T1':
             timeout = 1  

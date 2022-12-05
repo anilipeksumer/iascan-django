@@ -42,13 +42,24 @@ def addScan (request):
     form = ScannerForm(request.POST or None)
     if form.is_valid():
     #print(request.POST['domainName'])
+        disallowedchars = ["<", ">", "?", "\'", "=", "(", ")", "[" ,"]", "+", "-", "{", "}", "{", "}", "%", "&", "#", ";", "@", "|","\"","\\"]
+        for char in disallowedchars:
+            if char in request.POST['domainName']:
+                return HttpResponse("Bize XSS olmaz ;)")
+            elif char in request.POST['startPort']:
+                return HttpResponse("Bize XSS olmaz ;)")
+            elif char in request.POST['endPort']:
+                return HttpResponse("Bize XSS olmaz ;)")    
+  
         formObject = form.save(commit = False)
         messages.success(request,"Port Scan is started.")
         newObject = portscanner.PortScannerDjango()
-        newObject.backenderTerminal(request.POST['domainName'],request.POST['portRange'],request.POST['velocityField'])
+        newObject.backenderTerminal(request.POST['domainName'],request.POST['startPort'],request.POST['endPort'],request.POST['velocityField'])
         listObject.ports = newObject.open_ports
         listObject.banners = newObject.capturedBanners
         listObject.hostname = newObject.hname
+        if listObject.hostname == "app.iascan.online":
+            return HttpResponse("666 İyi denemeydi Montaigne")
         listObject.ip = newObject.ip
         formObject.ipField = newObject.ip
         formObject.ports = listObject.ports
@@ -65,6 +76,10 @@ def addScan (request):
 def dbuster(request):
     form = DirForm(request.POST or None)
     if form.is_valid():
+        disallowedchars = ["<", ">", "?", "\'", "=", "(", ")", "[" ,"]", "+", "-", "{", "}", "{", "}", "%", "&", "#", ";", "@", "|","\"","\\"]
+        for char in disallowedchars:
+            if char in request.POST['domainName']:
+                return HttpResponse("Bize XSS olmaz ;)")
         messages.success(request,"Port Scan is started.")
         newObject = dirbuster.DirBusterDjango()
         newObject.backendTerminal(request.POST['domainName'], request.POST['sslField'])

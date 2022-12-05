@@ -5,7 +5,7 @@ from .models import PortScanner,DirBuster
 class ScannerForm(forms.ModelForm):
     class Meta:
         model = PortScanner
-        fields = ["domainName", "portRange","velocityField"]
+        fields = ["domainName", "startPort","endPort","velocityField"]
         
 class DirForm(forms.ModelForm):
     class Meta:

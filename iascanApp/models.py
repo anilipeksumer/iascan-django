@@ -5,8 +5,9 @@ from django import forms
 # Create your models here.
 
 class PortScanner(models.Model):
-    domainName = models.CharField(max_length = 256, verbose_name = "Domain Address")
-    portRange = models.CharField(max_length = 11, verbose_name="Port Range")
+    domainName = models.CharField(max_length = 256, verbose_name = "Domain Address (ex: google.com)")
+    startPort = models.CharField(max_length = 5, verbose_name="Start Port (0-65565)")
+    endPort = models.CharField(max_length = 5, verbose_name="End Port")
     
     velocityChoices =(
         ("T1", "T1"),
@@ -20,7 +21,7 @@ class PortScanner(models.Model):
     velocityField = models.CharField(max_length=2,
                                        choices = velocityChoices,
                                        default = "T5",
-                                       verbose_name="Port Scan Time")
+                                       verbose_name="Port Scan Time (T5 Fastest, T1 Slowest)")
     ipField = models.GenericIPAddressField(verbose_name = "IP Address", default = "8.8.8.8")
     scan_date = models.DateTimeField(auto_now_add = True, verbose_name = "Scan Date")
     ports = models.TextField()
@@ -29,7 +30,7 @@ class PortScanner(models.Model):
 
     
 class DirBuster(models.Model):
-    domainName = models.CharField(max_length = 256, verbose_name = "Domain Address")
+    domainName = models.CharField(max_length = 256, verbose_name = "Domain Address (ex: google.com)")
     sslChoice =(
     ("SSL Disabled", "SSL Disabled"),
     ("SSL Enabled", "SSL Enabled"))
