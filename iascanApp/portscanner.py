@@ -1,14 +1,7 @@
 #!/usr/bin/env python
-
-
 from datetime import datetime
 import socket
-import ipaddress
 # We need to create regular expressions to ensure that the input is correctly formatted.
-import re
-from time import sleep
-from fpdf import FPDF
-import django
 import pyfiglet
 
 class PortScannerDjango:
@@ -23,8 +16,6 @@ class PortScannerDjango:
         endPort = int(djangoEndPort)
         if type(startPort) == "<class \'int\'>" or type(endPort) == "<class \'int\'>":
             raise ValueError
-        if startPort > endPort or startPort < 0 or endPort < 0 or startPort > 65535 or endPort > 65535:
-            raise ValueError
         self.ip = ""
         self.open_ports.clear()
         self.capturedBanners.clear()
@@ -33,13 +24,7 @@ class PortScannerDjango:
         ascii_banner= pyfiglet.figlet_format("       iascan backend")
         print(ascii_banner)
         print("************************************************")
-        port_range_pattern = re.compile("([0-9]+)-([0-9]+)")
-
-        # port_range_valid = port_range_pattern.search(djangoRange.replace(" ",""))
-        # if port_range_valid:
-        #     startPort = int(port_range_valid.group(1))
-        #     endPort = int(port_range_valid.group(2)) + 1
-               
+        
         if djangoVelocity == 'T1':
             timeout = 1  
         elif djangoVelocity == 'T2':
@@ -100,47 +85,47 @@ class PortScannerDjango:
         # self.createPDF()
 
         
-    def createPDF(self): # pip install FPDF
-        date = str(datetime.date(datetime.now())) + " "
-        time = str(datetime.time(datetime.now()))
-        fileName = '[' + str(self.hname) +'] ' + date + time + " Scan Report.pdf"
+    # def createPDF(self): # pip install FPDF
+    #     date = str(datetime.date(datetime.now())) + " "
+    #     time = str(datetime.time(datetime.now()))
+    #     fileName = '[' + str(self.hname) +'] ' + date + time + " Scan Report.pdf"
              
-        from reportlab.pdfgen import canvas
-        from reportlab.lib.units import inch  
+    #     from reportlab.pdfgen import canvas
+    #     from reportlab.lib.units import inch  
               
-        my_canvas = canvas.Canvas(fileName,bottomup=0)
-        my_canvas.drawString(45,45,"iascan Result")
-        my_canvas.drawImage("static/logo-tsp.jpg",6*inch,0.2*inch,45,45)
-        my_canvas.drawString (45,120,"Open Ports:")
-        position = 140
-        for port in self.open_ports:
-            my_canvas.drawString(45, position, str(port))
-            position = position + 20
-            if port == 80:
-                flag = 0
-                for banner in self.capturedBanners:
-                    if "Port = 80," in banner and "Server:" in banner:
-                        print('BURADAYIM')
-                        starting = str(banner).index("Server:")
-                        bg = str(banner)[starting:]
-                        ending = bg.index("\r\n")
-                        bg = bg[:ending]
-                        print(bg)
-                        bg = 'Web ' + bg 
-                        flag = 1
-                if flag == 0:
-                    bg = 'Web Server : - '
+    #     my_canvas = canvas.Canvas(fileName,bottomup=0)
+    #     my_canvas.drawString(45,45,"iascan Result")
+    #     my_canvas.drawImage("static/logo-tsp.jpg",6*inch,0.2*inch,45,45)
+    #     my_canvas.drawString (45,120,"Open Ports:")
+    #     position = 140
+    #     for port in self.open_ports:
+    #         my_canvas.drawString(45, position, str(port))
+    #         position = position + 20
+    #         if port == 80:
+    #             flag = 0
+    #             for banner in self.capturedBanners:
+    #                 if "Port = 80," in banner and "Server:" in banner:
+    #                     print('BURADAYIM')
+    #                     starting = str(banner).index("Server:")
+    #                     bg = str(banner)[starting:]
+    #                     ending = bg.index("\r\n")
+    #                     bg = bg[:ending]
+    #                     print(bg)
+    #                     bg = 'Web ' + bg 
+    #                     flag = 1
+    #             if flag == 0:
+    #                 bg = 'Web Server : - '
                     
-                my_canvas.drawString(80, position - 20, bg)
+    #             my_canvas.drawString(80, position - 20, bg)
 
 
         
-        # position = position + 40
+    #     # position = position + 40
         
-        # my_canvas.drawString (45,position ,"Grabbed Banners:")
-        # position = position + 20
+    #     # my_canvas.drawString (45,position ,"Grabbed Banners:")
+    #     # position = position + 20
         
-        my_canvas.save()
+    #     my_canvas.save()
 
 
 

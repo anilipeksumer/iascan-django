@@ -69,7 +69,6 @@ class DirBusterDjango:
                         pass
             except KeyboardInterrupt:
                 return print("You pressed Ctrl+C")
-
         return url_list
         
 
