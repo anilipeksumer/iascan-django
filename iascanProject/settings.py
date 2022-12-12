@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.cache.FetchFromCacheMiddleware',  # NEW
      "django.middleware.security.SecurityMiddleware",
      "whitenoise.middleware.WhiteNoiseMiddleware",
-    
+
 ]
 
 ROOT_URLCONF = "iascanProject.urls"

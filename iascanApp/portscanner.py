@@ -1,3 +1,9 @@
+"""_Bu sınıf, bir IP adresi, başlangıç ve bitiş portları ve hız parametrelerini alan bir port tarama ve ağ başlığı (banner) tarama
+işlevini gerçekleştirir. Tarama sonuçları open_ports, capturedBanners ve ip değişkenlerine kaydedilir. init metodu, bu değişkenleri 
+oluşturur ve backenderTerminal metodu tarama işlemini gerçekleştirir.
+Tarama hızı, "djangoVelocity" parametresine göre ayarlanabilir ve tarama sırasında ekrana bazı bilgi mesajları yazdırılabilir.
+    """
+
 #!/usr/bin/env python
 from datetime import datetime
 import socket
@@ -12,19 +18,23 @@ class PortScannerDjango:
         self.ip = ""
     
     def backenderTerminal(self,djangoIP,djangoStartPort,djangoEndPort,djangoVelocity):
+        # Tarama sırasında açık olan portları tutan liste
         startPort = int(djangoStartPort)
         endPort = int(djangoEndPort)
+        # Girilen port numaralarının tip kontrolü
         if type(startPort) == "<class \'int\'>" or type(endPort) == "<class \'int\'>":
             raise ValueError
         self.ip = ""
         self.open_ports.clear()
         self.capturedBanners.clear()
         self.hname = ""
+        # Terminalde bastırılacak olan ascii bannerın hazırlanması.
         print("************************************************\n")
         ascii_banner= pyfiglet.figlet_format("       iascan backend")
         print(ascii_banner)
         print("************************************************")
         
+        # Kullanıcının farklı hız seçeneklerini seçmesi durumunda tarama hızının adjust edilmesi.
         if djangoVelocity == 'T1':
             timeout = 1  
         elif djangoVelocity == 'T2':
@@ -39,6 +49,14 @@ class PortScannerDjango:
         """
                 PORT SCANNER   
                                     """
+        """Taranan Portları al
+        Geçen süreyi hesapla.
+        Verilen domain adresinin IP'sini bul ve objeye ekle.
+        Kullanıcıdan alınan port aralığındaki tüm portlara tek tek bağlanmaya çalış.
+        Bağlanabildiğim portları listeye ekle.
+        Hatalar için exceptionlar yer almaktadır.
+        
+        """
         ports = list(range(startPort,endPort))
         startTime = datetime.now()
         socket.setdefaulttimeout(timeout)
@@ -70,6 +88,11 @@ class PortScannerDjango:
         """
                 BANNER GRABBER   
                                     """
+                                    
+        """
+        Port Scannerda yakalanmış her bir port için o porta ait banner'ı yakalamaya çalış.
+        Eğer banner yakalanabilirse listeye ekle.
+        """                                    
         for port in self.open_ports:
             try:
                 bannergrabber = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -84,6 +107,10 @@ class PortScannerDjango:
                 pass 
         # self.createPDF()
 
+            """
+            Bu bölümün aşağısında yer alan kod gelecek hedeflerimizdeki pdf raporu oluşturma aşamasının ilk adımlarıdır.
+            Aktif olarak çok basit bir rapor halinde çıkartıldığından ana projeye henüz dahil edilmemiştir.
+            """
         
     # def createPDF(self): # pip install FPDF
     #     date = str(datetime.date(datetime.now())) + " "

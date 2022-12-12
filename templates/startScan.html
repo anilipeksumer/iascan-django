@@ -11,6 +11,7 @@
         <h3>Scan Page</h3>
         <hr>
         <form method = "POST" enctype="multipart/form-data">
+    
             {% csrf_token %}
             {{form.media}}
             {{form|crispy}}

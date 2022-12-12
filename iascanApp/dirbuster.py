@@ -1,11 +1,10 @@
 import pyfiglet
 from pathlib import Path
-from termcolor import colored
 import requests
 
 class DirBusterDjango:
     def __init__(self):
-        self.returnedDirs = []
+        self.returnedDirs = [] # çıktı sonucu bulunan dizinler.
 
     def backendTerminal(self,djangoIP,djangoSSL):
         print("************************************************\n")
@@ -21,14 +20,7 @@ class DirBusterDjango:
             url_prefix = "https://"
         else:
             url_prefix = "http://"
-        
-        print("[+] Program will return to main menu once bruteforcing is complete")
-        print("[+] Output will be saved in (" + djangoIP + ")_output.txt")
-        print('[+] Bruteforcing Started')
-
-        # Check domain name pattern matches
         names = []
-        # Converting the file in to list of lines
         paths = []
         with open('static/wordlist_db.txt', 'r+') as f:
             for line in f:
@@ -38,37 +30,29 @@ class DirBusterDjango:
                 else:
                     paths.append(line)   
 
-        url_list = []    # list of all valid urls
-        valid_url = 0    # total number of valid urls found
+        url_list = []    # geçerli urller
+        valid_url = 0    # geçerli url sayısı
+        try:
+            for path in paths:
 
-        # Check if url is valid using requests
+                url = f'{url_prefix}{djangoIP}/{path}'
 
-        with Path("static/dirb_outputs/(" + djangoIP + ")_output.txt").open('w+') as out_file:
-            try:
-                for path in paths:
+                try:
+                    # siteye get requesti gönder
+                    response = requests.get(url)
+                    
+                    # eğer siteden http:200  mesajı dönerse (yani dizin aktifse)
+                    if response.status_code == 200:
+                        print(f'[+] {url}')
 
-                    url = f'{url_prefix}{djangoIP}/{path}'
-
-                    try:
-                        # Sending get request to url
-                        response = requests.get(url)
-                        
-                        # if valid print url
-                        if response.status_code == 200:
-                            print(colored(f'[+] {url}', 'blue'))
-
-                            # add result to list
-                            url_list.append(url)
-                            self.returnedDirs.append(url)
-
-                            # add url to output file
-                            out_file.write(url+'\n')
-
-                            valid_url += 1
-                    except requests.ConnectionError:
-                        pass
-            except KeyboardInterrupt:
-                return print("You pressed Ctrl+C")
+                        # sonucu listeye ekle
+                        url_list.append(url)
+                        self.returnedDirs.append(url)
+                        valid_url += 1
+                except requests.ConnectionError:
+                    pass
+        except KeyboardInterrupt:
+            return print("Keyboard Interrupt -> Ctrl+C")
         return url_list
-        
+    
 

@@ -3,7 +3,7 @@ from pyexpat import model
 from django import forms
 from .models import PortScanner,DirBuster
 class ScannerForm(forms.ModelForm):
-    class Meta:
+    class Meta: #Django Formları oluşturmak için default verilen class adı.
         model = PortScanner
         fields = ["domainName", "startPort","endPort","velocityField"]
         
